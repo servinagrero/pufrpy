@@ -117,7 +117,7 @@ def crps_weight(
         raise ValueError("crps should be 2D or 3D")
 
     if crps.ndim == 2:
-        return np.apply_along_axis(hamming_weight, int(not by_row), crps)
+        return np.apply_along_axis(lambda x: hamming_weight(x, True), int(by_row), crps)
 
     return np.array(
         [crps_weight(crps[s, :, :], by_row) for s in range(crps.shape[0])],
@@ -145,7 +145,7 @@ def intra_hd(
     @njit
     def rel_fn(bv: BitVec, ref: int) -> np.float64:
         bv_new = np.delete(bv, ref)
-        return np.float64((bv_new ^ bv[ref]).sum())
+        return (bv_new ^ bv[ref]).sum() / bv_new.size
 
     if crps.ndim == 1:
         return rel_fn(crps, ref)
