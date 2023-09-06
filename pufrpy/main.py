@@ -153,7 +153,7 @@ def intra_hd(
         return np.apply_along_axis(rel_fn, 0, crps, ref)
 
     return np.array(
-        [intra_hd(crps[s, :, :], ref) for s in range(crps.shape[0])],
+        [intra_hd(crps[:, s, :], ref) for s in range(crps.shape[1])],
         dtype=np.float64,
     )
 
